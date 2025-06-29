@@ -3,7 +3,6 @@ from pyrogram.types import Message
 from pyrogram import filters, enums
 from translation import Translation
 import re
-from webdav3.client import Client as WebDAVClient
 from xml.etree import ElementTree
 from helper.nextcloud import nextcloud 
 from helper.logger import logger
