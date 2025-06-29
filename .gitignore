@@ -1,0 +1,37 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Your bot downloads/uploads cache (example)
+downloads/
+uploads/
+
+# Sessions
+*.Sessions
+*.session
+# Temporary files
+*.tmp
+
+/sample.py
+
+.prettierc
