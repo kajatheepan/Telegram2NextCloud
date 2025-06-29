@@ -12,7 +12,6 @@ dist/
 .vscode/
 .idea/
 
-*.txt
 
 # Logs
 *.log
