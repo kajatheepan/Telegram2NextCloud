@@ -1,5 +1,5 @@
 from pyrogram import Client as bot
-from pyrogram import filters
+from pyrogram import filters, enums
 from pyrogram.types import Message
 from translation import Translation
 from helper.humanbytes import humanbytes
@@ -12,7 +12,7 @@ async def download_command(client,message):
 
     # Check if the user is logged in
     if  nextcloud_client == None or nextcloud_client.islogged_in == False:
-        await message.reply_text(Translation.LOGIN_REQUIRED)
+        await message.reply_text(Translation.LOGIN_REQUIRED , parse_mode=enums.ParseMode.MARKDOWN)
         return
 
     if message.reply_to_message:
@@ -32,21 +32,21 @@ async def download_command(client,message):
 
             #check for sufficient quota
             if file_size > nextcloud_client.available_quota:
-                await message.reply_text(Translation.DOWNLOAD_FAILURE + "\n" + Translation.INSUFFICIENT_QUOTA)
+                await message.reply_text(Translation.DOWNLOAD_FAILURE + "\n" + Translation.INSUFFICIENT_QUOTA , parse_mode=enums.ParseMode.MARKDOWN)
                 return
             
             try:
                 await client.download_media(reply_message, file_path)
-                await message.reply_text(Translation.DOWNLOAD_SUCCESS)
+                await message.reply_text(Translation.DOWNLOAD_SUCCESS, parse_mode=enums.ParseMode.MARKDOWN,)
                 # Upload to NextCloud Server
                 upload_response = await nextcloud_client.upload(file_path, file_name)
                 if upload_response==True:
-                    await message.reply_text(Translation.UPLOAD_SUCCESS.format(file_name=file_name, size=humanbytes(file_size)))
+                    await message.reply_text(Translation.UPLOAD_SUCCESS.format(file_name=file_name, size=humanbytes(file_size)), parse_mode=enums.ParseMode.MARKDOWN)
             except Exception as e:
                 await message.reply_text(f"{Translation.DOWNLOAD_FAILURE}\nError: {str(e)}")
                 
     else:
-        await message.reply_text("Please reply to a media message to download it.")
+        await message.reply_text("Please reply to a media message to download it.", parse_mode=enums.ParseMode.MARKDOWN)
 
     #upload process
 
