@@ -4,40 +4,32 @@
 **
 ## What it does
 
-- Saves photos, videos, documents from Telegram to NextCloud
+- Saves photos, videos, and documents from Telegram to your NextCloud
 - Easy to set up and use
-- Works in private chats and groups
-- Keeps your media organized
-
 ## Setup
 
-1. Get your bot token from [@BotFather](https://t.me/BotFather) on Telegram
+1. Get API credentials from [my.telegram.org](https://my.telegram.org):
 
-2. Clone this repository:
+2. Get your bot token from [@BotFather](https://t.me/BotFather) on Telegram
+
+3. Clone this repository:
 ```bash
 git clone https://github.com/kajatheepan/Telegram2NextCloud.git
 cd Telegram-to-NextCloud
 ```
 
-3. Configure environment variables:
-    - Copy `.env.example` to `.env`
-    - Edit `.env` with your settings:
-      ```
-    ```env
+4. Configure environment variables:
+     - Copy `.env.example` to `.env`
+     - Edit `.env` with your settings:
     
-    BOT_TOKEN="your_telegram_bot_token" # Your Telegram bot token from @BotFather
-    
-    COOLDOWN_SECONDS="60" # Cooldown between uploads in seconds
+     ```env
+     API_ID="your_api_id" # API ID from my.telegram.org
+     API_HASH="your_api_hash" # API hash from my.telegram.org
+     BOT_TOKEN="your_telegram_bot_token" # Your Telegram bot token from @BotFather
+     UPLOAD_POINT="https://nextcloud.example.com/remote.php/webdav/" # Your NextCloud WebDAV URL
+     ```
 
-    UPLOAD_POINT="https://nextcloud.example.com/remote.php/webdav/" # Your NextCloud WebDAV URL
-
-    WORKERS="3" # Number of worker processes
-
-    MAX_CONCURRENT_TRANSMISSIONS="5" # Maximum concurrent file transfers
-    ```
-      ```
-
-4. Start the bot:
+5. Start the bot:
 ```bash
 python main.py
 ```
