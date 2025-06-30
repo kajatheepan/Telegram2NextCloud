@@ -3,16 +3,19 @@ from pyrogram.types import Message
 from config import Configs as Config
 from helper.logger import logging
 
-
-bot_token = Config.BOT_TOKEN  # Replace with your actual Bot Token
+api_id = Config.API_ID
+api_hash = Config.API_HASH  
+bot_token = Config.BOT_TOKEN  
 workers = Config.WORKERS  # Number of workers for handling requests
 plugins = dict(root="plugins")  # Directory where your plugins are located
 
-app = Client("TGbot", bot_token= bot_token,
+app = Client("TGbot", bot_token=bot_token,
              plugins=plugins,
-             workers=workers, # Number of workers for handling requests
-             max_concurrent_transmissions=Config.MAX_CONCURRENT_TRANSMISSIONS, # Maximum number of concurrent transmissions
-             sleep_threshold=60) # Sleep threshold to avoid rate limits
+             workers=workers,  # Number of workers for handling requests
+             max_concurrent_transmissions=Config.MAX_CONCURRENT_TRANSMISSIONS,  # Maximum number of concurrent transmissions
+             sleep_threshold=60,
+             api_id=api_id,
+             api_hash=api_hash)  # Sleep threshold to avoid rate limits
 
 
 app.user_sessions = {}

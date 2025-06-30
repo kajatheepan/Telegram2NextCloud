@@ -7,10 +7,10 @@ import ssl
 from aiohttp import AsyncIterablePayload
 from helper.logger import logger
 from urllib.parse import quote
-
+from config import Configs
 
 class nextcloud:
-    upload_point = "https://dms.uom.lk/remote.php/webdav/"
+    upload_point = Configs.UPLOAD_POINT
     nextcloud_server = "https://dms.uom.lk"
     ssl_context = ssl.create_default_context(cafile=certifi.where())
 
@@ -53,7 +53,7 @@ class nextcloud:
             <d:getetag/>
         </d:prop>
         </d:propfind>'''
-
+        
         async with aiohttp.ClientSession() as session:
             async with session.request('PROPFIND', uploadpoint, data=xml_body,
                                     headers=headers,

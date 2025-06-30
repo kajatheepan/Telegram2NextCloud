@@ -32,6 +32,10 @@ async def login_command(client: bot, message: Message):
                 used_quota = humanbytes(nextcloud_client.used_quota)
                 total_quota = humanbytes(nextcloud_client.used_quota+nextcloud_client.available_quota)
                 await message.reply_text(Translation.LOGIN_SUCCESS.format(used_quota=used_quota, total_quota=total_quota), parse_mode=enums.ParseMode.MARKDOWN)
+            else:
+                logger.error(f"Login failed for user {username}: Invalid credentials")
+                await message.reply_text(Translation.LOGIN_FAILURE, parse_mode=enums.ParseMode.MARKDOWN)
+                return
         except Exception as e:
             logger.error(f"Login failed for user {username}: {str(e)}")
             await message.reply_text(f"Login failed: {str(e)}")

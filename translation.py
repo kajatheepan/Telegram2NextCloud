@@ -91,6 +91,11 @@ class Translation(object):
         "Replace `username` and `password` with your NextCloud credentials.\n"
     )
 
+    LOGIN_FAILURE = (
+        "**Login failed!**\n"
+        "Please check your credentials and try again."
+    )
+
     UPLOAD_PROGRESS = (
         "⬆️ **Uploading:** `{percent:.2f}%`\n\n"
         "📤 **Uploaded:** `{bytes_read}`\n\n"
