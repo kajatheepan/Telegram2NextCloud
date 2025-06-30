@@ -15,7 +15,7 @@ async def login_command(client: bot, message: Message):
     if await check_login(client, message):
         await message.reply_text(Translation.LOGIN_ALREADY,parse_mode=enums.ParseMode.MARKDOWN)
         return
-        
+    await message.delete()
     message_text = message.text.strip().split()
     if len(message_text) != 3:
         await message.reply_text(Translation.INVALID_LOGIN_CMD,parse_mode=enums.ParseMode.MARKDOWN)

@@ -1,18 +1,34 @@
 import asyncio
 import aiohttp
 import xml.etree.ElementTree as ET
+from helper.progress import FileWithProgress
+import certifi
+import ssl
+from aiohttp import AsyncIterablePayload
+from helper.logger import logger
+from urllib.parse import quote
+
 
 class nextcloud:
     upload_point = "https://dms.uom.lk/remote.php/webdav/"
-    
+    nextcloud_server = "https://dms.uom.lk"
+    ssl_context = ssl.create_default_context(cafile=certifi.where())
+
     def __init__(self,username,password):
         self.username = username
         self.password = password
         self.islogged_in = False
         self.used_quota = None
         self.available_quota = None
+        self.infile_quota = 0
 
-    
+    async def get_available_quota(self):
+        if self.islogged_in:
+            await self.login()
+            return self.available_quota if self.available_quota else 0
+        else:
+            return 0
+
     async def login(self):
         username = self.username
         password = self.password
@@ -41,7 +57,7 @@ class nextcloud:
         async with aiohttp.ClientSession() as session:
             async with session.request('PROPFIND', uploadpoint, data=xml_body,
                                     headers=headers,
-                                    auth=aiohttp.BasicAuth(username, password)) as resp:
+                                    auth=aiohttp.BasicAuth(username, password),ssl=nextcloud.ssl_context) as resp:
                 response_text = await resp.text()
                 root = ET.fromstring(response_text)
                 ns = {
@@ -69,16 +85,36 @@ class nextcloud:
                     return False
     
     
-    async def upload(self,file_path,file_name):
+    async def upload(self,file_path,file_name,message):
+        
         async with aiohttp.ClientSession() as session:
-            with open(file_path, 'rb') as file:
-                upload_url = f"{nextcloud.upload_point}{file_name}"
-                async with session.put(upload_url, data=file,auth=aiohttp.BasicAuth(self.username,self.password)) as response:
-                    if response.status in [200,201,204 ]:
+            try:                
+                logger.info(f"Starting upload of file: {file_name}")
+                file_stream = FileWithProgress(file_path,message)
+                headers = {'Content-Length': str(file_stream.total_size)}
+
+                # Encode the file name for URL compatibility to manage special characters
+                encoded_file_name = quote(str(file_name))
+                upload_url = f"{nextcloud.upload_point}{encoded_file_name}"
+                logger.info(f"Upload URL: {upload_url}")
+
+                # Perform the PUT request to upload the file
+                logger.info(f"Initiating upload - File size: {file_stream.total_size} bytes")
+                async with session.put(upload_url, data=file_stream ,headers=headers ,auth=aiohttp.BasicAuth(self.username,self.password),ssl=nextcloud.ssl_context) as response:
+                    if response.status in [200,201,204]:
+                        logger.info(f"Upload successful for {file_name}")
                         return True
                     else:
-                        print(f"Upload failed with status {response.status}")
-                        return f"Upload failed with status {response.status}"
-        
-    def share(self,upload_path,):
+                        error_text = await response.text()
+                        logger.error(f"Upload failed - Status: {response.status}, Error: {error_text}")
+                        print(f"Upload failed with status {response.status}: {error_text}")
+                        return response.status
+            except Exception as e:
+                logger.error(f"Upload error for {file_name}: {str(e)}", exc_info=True)
+                await message.edit_text(f"**Upload failed!**\nError: {str(e)}")
+                return False
+            finally:
+                logger.info(f"Upload operation completed for {file_name}")
+
+    def share(self, upload_path):
         pass

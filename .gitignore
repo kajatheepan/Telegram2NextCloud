@@ -12,6 +12,8 @@ dist/
 .vscode/
 .idea/
 
+venv/
+.venv/
 
 # Logs
 *.log
@@ -30,9 +32,14 @@ uploads/
 # Sessions
 *.Sessions
 *.session
+*.session-journal
+
 # Temporary files
 *.tmp
 
 /sample.py
+/test.py
 
 .prettierc
+
+
