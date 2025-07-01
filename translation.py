@@ -6,11 +6,11 @@ class Translation(object):
     Contains all user-facing messages and responses for the TG2DMS Bot.
     """
     WELCOME = (
-        "**🌟 Hello {username}!** 👋\n\n"
-        "📱 I'm your **{bot_username}** Bot, ready to help you upload files from Telegram to NextCloud 📤\n\n"
-        "🔹 Your NextCloud server: **{nextcloud_url}**\n"
-        "🔐 To get started, please log in to your NextCloud account.\n\n"
-        "💡 Type `/help` to see all available commands! ✨"
+        "**Hello {username}!** 👋\n\n"
+        "I'm your **{bot_username}** Bot, helping you upload files from Telegram to NextCloud. 🚀\n\n"
+        "• NextCloud domain: **{nextcloud_url}** 🌐\n"
+        "• To get started, please log in to your NextCloud account. 🔑\n"
+        "• To upload files, reply to any media message with `/upload` 📤\n\n"
     )
 
     HELP = (

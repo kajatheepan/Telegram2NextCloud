@@ -13,10 +13,21 @@ async def handle_callback_query(client: bot, callback_query: CallbackQuery):
     message = callback_query.message
     user_id = callback_query.from_user.id
     if query_data.startswith("login"):
-        await message.edit_text(
-            Translation.LOGIN_HELP,
-            parse_mode=enums.ParseMode.MARKDOWN
-        )
+        #get user nextcloud client object
+        if client.user_sessions.get(user_id) is not None:
+            nextcloud_client = client.user_sessions[user_id]
+            if nextcloud_client.islogged_in:
+                await message.edit_text(
+                    Translation.LOGIN_ALREADY,
+                    reply_markup=InlineKeyboard.CLOSE,
+                    parse_mode=enums.ParseMode.MARKDOWN
+                )
+        else:
+            await message.edit_text(
+                Translation.LOGIN_HELP,
+                reply_markup=InlineKeyboard.CLOSE,
+                parse_mode=enums.ParseMode.MARKDOWN
+            )
     elif query_data.startswith("help"):
         await message.edit_text(
             Translation.HELP,

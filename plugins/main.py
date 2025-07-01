@@ -30,7 +30,7 @@ async def start_command(client: bot, message: Message):
 @bot.on_message(filters.command(['help']))
 async def help_command(client: bot, message: Message):
     try:
-        await message.reply_text(Translation.HELP, parse_mode=enums.ParseMode.MARKDOWN)
+        await message.reply_text(Translation.HELP, reply_markup=InlineKeyboard.HELP, parse_mode=enums.ParseMode.MARKDOWN)
     except Exception as e:
         logger.error(f"Error in help_command: {str(e)}")
         await message.reply_text("An error occurred while processing your request.")
@@ -40,6 +40,6 @@ async def about_command(client:bot,message:Message):
     try:
         #get username
         bot_username = await get_bot_username(client)
-        await message.reply_text(Translation.ABOUT.format(bot_username=bot_username),parse_mode=enums.ParseMode.MARKDOWN)
+        await message.reply_text(Translation.ABOUT.format(bot_username=bot_username),reply_markup=InlineKeyboard.ABOUT, parse_mode=enums.ParseMode.MARKDOWN)
     except Exception as e:
         logger.error(f'Error in about_command: {str(e)}')
