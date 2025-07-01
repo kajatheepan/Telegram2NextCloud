@@ -8,7 +8,7 @@ from helper.progress import DownloadProgressReader
 from helper.nextcloud import nextcloud
 from helper.utils import get_file_name, get_file_size
 from pyrogram.errors import FloodWait
-import asyncio,time
+import asyncio,os
 from helper.utils import cooldown_user
 
 COOLDOWN_SECONDS = 60  # Cooldown time in seconds
@@ -99,6 +99,13 @@ async def download_command(client, message):
                         parse_mode=enums.ParseMode.MARKDOWN
                     )
 
+                #Remove the downloaded file after upload
+                try:
+                    if os.path.exists(file_path):
+                        os.remove(file_path)
+                        logger.info(f"Removed local file after upload: {file_path}")
+                except Exception as e:
+                    logger.error(f"Error removing local file after upload: {str(e)}", exc_info=True)
 
             except Exception as e:
                 logger.error(f"Error during download/upload process: {str(e)}", exc_info=True)
